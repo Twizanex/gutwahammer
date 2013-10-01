@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+    <name>gutwahammer</name>
+    <author>Tom Ondiba</author>
+    <version>1.8.15b</version>
+    <category>spam</category>
+    <category>hammering</category>
+    <category>anti spam</category>
+    <description>Automatically ban web site hammers! and Protect your site against Referer Spam! In addition, Send Bad Bots and Spiders packing! Protect your valuable Elgg site resources for genuine users, members or clients..</description>
+    <repository> https://github.com/Twizanex/gutwahammer</repository>
+    <website>http://www.twizanex.com/</website>
+    <copyright>See lisence.txt</copyright>
+    <license>GNU Public License version 2</license>
+    <requires>
+        <type>elgg_release</type>
+        <version>1.8</version>
+    </requires>
+   
+</plugin_manifest>

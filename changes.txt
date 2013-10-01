@@ -1,0 +1,164 @@
+
+
+
+
+	changes:
+
+	0.9.3
+
+		+	You now have the option to perfomr a quick DNS lookup of the
+			IP Address of bad clients, and have this added to the logging.
+
+			This was already enabled, you now have the option to *disable* it,
+			if required.
+
+		+	Anti-Hammer now send a valid "Retry-After" header, which is set to
+			the client's current hammer delay + 1 second.
+
+		+	Added a link to the Anti-Hammer page, should lessen the wtf-factor.
+
+
+
+	0.9.2
+
+		+	You can now choose whether to allow your specified clients (aka 
+			"exemptions") to  either completely bypass anti-hammer (current
+			exemption method)..
+
+				$anti_hammer['allow_bots'] = true;
+
+			Or else specify an integer, representing a hammer_time, in 
+			1/100th Second, which will apply to *only* these clients..
+
+				$anti_hammer['allow_bots'] = 50;
+
+			This setting would enable your specified clients to hammer the site 
+			at a rate of two hits-per-second, but no faster.
+
+			Effectively, we now have two hammer rates, one for known good 
+			clients, and one for everyone else.
+
+	0.9
+
+		+	Good bots & spiders can now be allowed to bypass the hammer. This is
+			achieved through the use of standard spider IP lists, as published
+			here..
+
+				http://www.iplists.com/
+
+			along with a simple ini file, detailing which user-agent links to
+			which IP list. A working ini, and more details, will be included in
+			the preference section (above), as well as the release.
+
+
+	0.8.*
+
+		+	Anti-Hammer now sends a proper 503 (service temporarily unavailable)
+			message, rather than a 200 OK message. This will be useful in 
+			situations where valid bots are temporarily hammering, and is more
+			correct in this scenario. The reource *will* be back, if they cut
+			out the crazy hammering!
+
+			If you are running under cgi/*suexec (non-module), the extra 
+			required header is automatically sent.
+
+			In use, this causes many bots to back-off immediately. Excellent!
+
+
+		~	Improved the ban resetting (which needs to work independantly of the
+			Garbage collection mechanism). After the ban time, the client's
+			cut-off is wiped, and their start time set to *now*, just like a new
+			client, however, their hammer_count is set to one hammer below the
+			first trigger level. In other words, a single hammer gets them the
+			NO Hammer! page; and to the final page quicker than new clients.
+
+			Even if you use rolling triggers, Anti_hammer will still use the 
+			first ban level to calculate this number, so set that to whatever 
+			you want.
+
+		~	ban_times and ban_levels have been renamed to waiting_times and 
+			trigger_levels, to avoid confusion with the ban_time (for the new
+			total cut-off). These also make more sense, as they are not bans, 
+			simply delays.
+
+
+	0.7.*
+
+		+	Added rolling ban times. Rather than have set limits which the
+			client can cross, this simply increments the ban time with each and 
+			every hammer attempt. 1-2-3-4-5-6-7.. etc. cut-off still functions 
+			as before for each system (rolling or preset levels).
+
+			This was, in fact, the original system, which I replaced with the
+			level presets early on, but it's kinda fun, and the code is simple.
+
+		~	Removed the file-tools.php include statement, and put the functions
+			directly into here (slightly renamed). I figure anyone smart enough
+			to be including my file-tools, will be smart enough to figure out
+			how to put that back, if required. 
+
+		+	More things are configurable, like the page title. Why not!
+
+
+	0.6.*
+
+		+	Added capability to work with clients who do not accept, or have 
+			chosen not to accept (read: disabled) cookies.
+
+			Basically, we write a "fake" session. The fake session uses a 
+			serialized array in a flat file, just like regular php sessions, and
+			is created before they even get receive their first page. From that
+			point on, they are known (by Anti-Hammer) by this ID.
+
+			The name of the client's session ID file is the session ID itself; 
+			an MD5 of all the known usable client data concatenated together.
+
+		~	php session usage is still available as an option, if required.
+
+		+	Added Garbage Collection for the fake session files. Both how often 
+			this happens (every 'so-many' requests), and how old is considered 
+			"stale", are configurable.
+
+		+	Ban time is now configurable (in hours). Remember to ensure that 
+			Garbage Collection isn't happening before this time.
+
+		+	Added penultimate message for cut-off. You get one *final* warning!
+
+		~	Cleaned-up the code regarding sessions. We now make a clean break,
+			converting whichever type of session data into a local array, and
+			then work with that. At the end, we write the pertinent data back to
+			whichever type of session is being utilized (built-in or php).
+
+
+	0.5.*
+
+		+	You can now configure a cut-off point. When the number of violations 
+			reaches this number, their pages simply die. This is disabled by 
+			default. This point is, of course, configurable. (actually, I got 
+			called away in the middle of this, so I'll need to check how far I 
+			got!)
+
+	0.4.*
+
+		+	Added user preferences for lots of the settings, voilation levels, 
+			times, etc. Added error checking for these, so they should be fairly 
+			foolproof (good movie, by the way, "Foolproof", 2003).
+
+	0.3.*
+
+		+	Added configurable protection skipping for certain file types 
+			(usually associated files and such). This replaces a nasty hack that 
+			lived at the top of the script.
+
+		+	Added skipping for generated images, too (GD images, etc.). This can 
+			also be used to skip other tpyes. See the preferences for more 
+			details.
+
+		+	Added configurable messages. I'll likely put this out eventually, 
+			it's kinda useful.
+
+	0.2.*
+
+		+	Added ignored areas, for chat scripts and such. places where either 
+			hammering is allowed, or is dealt with by the local script.
+
